@@ -8,7 +8,7 @@ import Update from "./pages/Update"
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <nav>
         <h1>Supa Smoothies</h1>
         <Link to="/">Home</Link>
