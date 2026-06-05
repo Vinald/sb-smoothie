@@ -1,14 +1,12 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom"
-
+import { BrowserRouter, Routes, Route, Link } from "react-router-dom"; 
 // pages
-import Home from "./pages/Home"
-import Create from "./pages/Create"
-import Update from "./pages/Update"
-
+import Home from "./pages/Home";
+import Create from "./pages/Create";
+import Update from "./pages/Update";
 
 function App() {
   return (
-    <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <BrowserRouter>
       <nav>
         <h1>Supa Smoothies</h1>
         <Link to="/">Home</Link>
