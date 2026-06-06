@@ -1,6 +1,7 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import supabase from "../config/supabaseClient"
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { createSmoothie } from '../services/smoothieService'
+import { uploadImage } from '../services/storageService'
 
 const Create = () => {
   const navigate = useNavigate()
@@ -21,27 +22,19 @@ const Create = () => {
 
     let image_url = null
     if (image) {
-      const fileName = `${Date.now()}-${image.name}`
-      const { error: uploadError } = await supabase.storage
-        .from('smoothies')
-        .upload(fileName, image)
-      if (uploadError) {
+      try {
+        image_url = await uploadImage(image)
+      } catch {
         setFormError('Image upload failed. Please try again.')
         setLoading(false)
         return
       }
-      const { data: urlData } = supabase.storage.from('smoothies').getPublicUrl(fileName)
-      image_url = urlData.publicUrl
     }
 
-    const { error } = await supabase
-      .from('smoothie')
-      .insert([{ title, method, rating, image_url }])
-
+    const { error } = await createSmoothie({ title, method, rating, image_url })
     if (error) {
       setFormError('Could not create the smoothie. Please try again.')
     } else {
-      setFormError(null)
       navigate('/')
     }
     setLoading(false)

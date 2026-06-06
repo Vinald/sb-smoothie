@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import supabase from "../config/supabaseClient"
+import { fetchSmoothieById, updateSmoothie } from '../services/smoothieService'
+import { uploadImage } from '../services/storageService'
 
 const Update = () => {
   const { id } = useParams()
@@ -15,50 +16,37 @@ const Update = () => {
   const [formError, setFormError] = useState(null)
 
   useEffect(() => {
-    const fetchSmoothie = async () => {
-      const { data, error } = await supabase
-        .from('smoothie')
-        .select()
-        .eq('id', id)
-        .single()
+    const load = async () => {
+      const { data, error } = await fetchSmoothieById(id)
       if (error) {
         navigate('/', { replace: true })
-      }
-      if (data) {
+      } else {
         setTitle(data.title)
         setMethod(data.method)
         setRating(data.rating)
         setExistingImageUrl(data.image_url)
       }
     }
-    fetchSmoothie()
+    load()
   }, [id, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setFormError(null)
     setLoading(true)
 
-    setFormError(null)
     let image_url = existingImageUrl
     if (image) {
-      const fileName = `${Date.now()}-${image.name}`
-      const { error: uploadError } = await supabase.storage
-        .from('smoothies')
-        .upload(fileName, image)
-      if (uploadError) {
+      try {
+        image_url = await uploadImage(image)
+      } catch {
         setFormError('Image upload failed. Make sure the "smoothies" storage bucket exists in Supabase.')
         setLoading(false)
         return
       }
-      const { data: urlData } = supabase.storage.from('smoothies').getPublicUrl(fileName)
-      image_url = urlData.publicUrl
     }
 
-    const { error } = await supabase
-      .from('smoothie')
-      .update({ title, method, rating, image_url })
-      .eq('id', id)
-
+    const { error } = await updateSmoothie(id, { title, method, rating, image_url })
     if (error) {
       setFormError('Could not update the smoothie. Please try again.')
     } else {
