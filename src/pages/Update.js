@@ -31,26 +31,36 @@ const Update = () => {
     fetchSmoothie()
   }, [id, navigate])
 
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    const { error } = await supabase
+      .from('smoothie')
+      .update({ title, method, rating })
+      .eq('id', id)
+
+    if (!error) navigate('/')
+  }
+
   return (
     <div className="page create">
-      <form>
+      <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           id="title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
         <label htmlFor="method">Method:</label>
-        <textarea 
+        <textarea
           id="method"
           value={method}
           onChange={(e) => setMethod(e.target.value)}
         />
 
         <label htmlFor="rating">Rating:</label>
-        <input 
+        <input
           type="number"
           id="rating"
           value={rating}
