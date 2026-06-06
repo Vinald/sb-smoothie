@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from("smoothie").select().eq("voided", false);
+      const { data, error } = await supabase.from("smoothie").select().eq("voided", false).order("created_at", { ascending: false });
       console.log("Supabase response:", { data, error });
       if (error) {
         setFetchError(error.message);
