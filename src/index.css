@@ -33,6 +33,26 @@ nav h1 {
   padding: 20px;
 }
 
+/* home header */
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.filter select {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Poppins';
+  font-size: 0.9em;
+  cursor: pointer;
+}
+
 /* smoothie grid */
 .smoothie-grid {
   margin-top: 40px;
