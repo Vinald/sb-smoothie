@@ -9,6 +9,9 @@ const Update = () => {
   const [title, setTitle] = useState('')
   const [method, setMethod] = useState('')
   const [rating, setRating] = useState('')
+  const [image, setImage] = useState(null)
+  const [existingImageUrl, setExistingImageUrl] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchSmoothie = async () => {
@@ -17,7 +20,6 @@ const Update = () => {
         .select()
         .eq('id', id)
         .single()
-
       if (error) {
         navigate('/', { replace: true })
       }
@@ -25,20 +27,37 @@ const Update = () => {
         setTitle(data.title)
         setMethod(data.method)
         setRating(data.rating)
+        setExistingImageUrl(data.image_url)
       }
     }
-
     fetchSmoothie()
   }, [id, navigate])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setLoading(true)
+
+    let image_url = existingImageUrl
+    if (image) {
+      const fileName = `${Date.now()}-${image.name}`
+      const { error: uploadError } = await supabase.storage
+        .from('smoothies')
+        .upload(fileName, image)
+      if (uploadError) {
+        setLoading(false)
+        return
+      }
+      const { data: urlData } = supabase.storage.from('smoothies').getPublicUrl(fileName)
+      image_url = urlData.publicUrl
+    }
+
     const { error } = await supabase
       .from('smoothie')
-      .update({ title, method, rating })
+      .update({ title, method, rating, image_url })
       .eq('id', id)
 
     if (!error) navigate('/')
+    setLoading(false)
   }
 
   return (
@@ -59,15 +78,30 @@ const Update = () => {
           onChange={(e) => setMethod(e.target.value)}
         />
 
-        <label htmlFor="rating">Rating:</label>
+        <label htmlFor="rating">Rating (1–10):</label>
         <input
           type="number"
           id="rating"
           value={rating}
+          min="1"
+          max="10"
           onChange={(e) => setRating(e.target.value)}
         />
 
-        <button>Update Smoothie Recipe</button>
+        <label htmlFor="image">Image:</label>
+        {existingImageUrl && (
+          <img src={existingImageUrl} alt="current" className="current-image" />
+        )}
+        <input
+          type="file"
+          id="image"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+
+        <button disabled={loading}>
+          {loading ? 'Saving...' : 'Update Smoothie Recipe'}
+        </button>
       </form>
     </div>
   )
