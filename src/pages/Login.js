@@ -46,7 +46,7 @@ const Login = () => {
           required
         />
 
-        <button disabled={loading}>
+        <button type="submit" disabled={loading}>
           {loading ? 'Please wait...' : isSignUp ? 'Sign Up' : 'Login'}
         </button>
 
