@@ -6,7 +6,7 @@ const Home = () => {
     data, loading, fetchError,
     ratingFilter, setRatingFilter,
     page, setPage, totalPages,
-    removeById,
+    removeById, silentRefresh,
   } = useSmoothies()
 
   return (
@@ -44,7 +44,7 @@ const Home = () => {
               <SmoothieCard
                 key={smoothie.id}
                 smoothie={smoothie}
-                onDelete={removeById}
+                onDelete={(id) => { removeById(id); silentRefresh() }}
               />
             ))}
           </div>
