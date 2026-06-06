@@ -41,12 +41,21 @@ nav h1 {
   gap: 40px;
 }
 .smoothie-card {
+  display: block;
   width: 100%;
   padding: 10px;
   background: #fff;
   box-sizing: border-box;
   border-radius: 6px;
   position: relative;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.smoothie-card:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transform: translateY(-2px);
 }
 .smoothie-card .rating {
   position: absolute;
@@ -60,42 +69,6 @@ nav h1 {
   padding: 20px 0;
   line-height: 0px;
   text-align: center;
-}
-.smoothie-card .buttons {
-  text-align: right;
-  margin-top: 14px;
-}
-.smoothie-card i {
-  color: #bbb;
-  margin-left: 10px;
-  font-size: 1.2em;
-  padding: 6px;
-  background: #eee;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: var(--primary);
-  color: #fff;
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 0.9em;
-  font-family: 'Poppins';
-  transition: background 0.2s;
-}
-.btn:hover {
-  background: var(--secondary);
-}
-.btn i {
-  color: #fff;
-  background: none;
-  padding: 0;
-  font-size: 1em;
-  margin: 0;
 }
 
 /* forms */
