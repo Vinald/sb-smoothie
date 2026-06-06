@@ -57,6 +57,29 @@ nav h1 {
   box-shadow: 0 4px 16px rgba(0,0,0,0.12);
   transform: translateY(-2px);
 }
+.delete-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s;
+}
+.delete-btn i {
+  color: #ccc;
+  font-size: 1.2em;
+}
+.delete-btn:hover {
+  background: #fee;
+}
+.delete-btn:hover i {
+  color: #e53935;
+}
 .smoothie-card .rating {
   position: absolute;
   top: -10px;

@@ -8,7 +8,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const { data, error } = await supabase.from("smoothie").select();
+      const { data, error } = await supabase.from("smoothie").select().eq("voided", false);
       console.log("Supabase response:", { data, error });
       if (error) {
         setFetchError(error.message);
@@ -30,7 +30,11 @@ const Home = () => {
         <div className="smoothies">
           <div className="smoothie-grid">
             {data.map((smoothie) => (
-              <SmoothieCard key={smoothie.id} smoothie={smoothie} />
+              <SmoothieCard
+                key={smoothie.id}
+                smoothie={smoothie}
+                onDelete={(id) => setData(prev => prev.filter(s => s.id !== id))}
+              />
             ))}
           </div>
         </div>
