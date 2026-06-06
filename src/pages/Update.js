@@ -12,6 +12,7 @@ const Update = () => {
   const [image, setImage] = useState(null)
   const [existingImageUrl, setExistingImageUrl] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [formError, setFormError] = useState(null)
 
   useEffect(() => {
     const fetchSmoothie = async () => {
@@ -37,6 +38,7 @@ const Update = () => {
     e.preventDefault()
     setLoading(true)
 
+    setFormError(null)
     let image_url = existingImageUrl
     if (image) {
       const fileName = `${Date.now()}-${image.name}`
@@ -44,6 +46,7 @@ const Update = () => {
         .from('smoothies')
         .upload(fileName, image)
       if (uploadError) {
+        setFormError('Image upload failed. Make sure the "smoothies" storage bucket exists in Supabase.')
         setLoading(false)
         return
       }
@@ -56,7 +59,11 @@ const Update = () => {
       .update({ title, method, rating, image_url })
       .eq('id', id)
 
-    if (!error) navigate('/')
+    if (error) {
+      setFormError('Could not update the smoothie. Please try again.')
+    } else {
+      navigate('/')
+    }
     setLoading(false)
   }
 
@@ -102,6 +109,7 @@ const Update = () => {
         <button disabled={loading}>
           {loading ? 'Saving...' : 'Update Smoothie Recipe'}
         </button>
+        {formError && <p className="error">{formError}</p>}
       </form>
     </div>
   )
