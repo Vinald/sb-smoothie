@@ -7,8 +7,9 @@ const SmoothieCard = ({ smoothie }) => {
       <p>{smoothie.method}</p>
       <div className="rating">{smoothie.rating}</div>
       <div className="buttons">
-        <Link to={"/" + smoothie.id}>
+        <Link to={"/" + smoothie.id} className="btn">
           <i className="material-icons">edit</i>
+          Edit
         </Link>
       </div>
     </div>
